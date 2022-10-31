@@ -349,7 +349,7 @@
 							<input type="hidden"  class="form-control" id="task-id" name="task-id"/>
 							<div class="mb-3">
 								<label class="form-label">Title</label>
-								<input type="text" class="form-control" id="task-title" name="task-title"/>
+								<input type="text" class="form-control" id="task-title" name="task-title" required/>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
@@ -367,18 +367,23 @@
 							<div class="mb-3">
 								<label class="form-label">Priority</label>
 								<select class="form-select" id="task-priority" name="task-priority">
-									<option value="1" selected>Low</option>
-									<option value="2">Medium</option>
-									<option value="3">High</option>
-									<option value="4">Critical</option>
+									<?php 
+									$sql="SELECT * FROM priorities";
+									$query=mysqli_query($con,$sql);
+									while($row=mysqli_fetch_assoc($query)){
+									echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';} 
+									?>
 								</select>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Status</label>
 								<select class="form-select" id="task-status" name="task-status">
-									<option value="1" selected>To Do</option>
-									<option value="2">In Progress</option>
-									<option value="3">Done</option>
+									<?php 
+									$sql="SELECT * FROM statuses";
+									$query=mysqli_query($con,$sql);
+									while($row=mysqli_fetch_assoc($query)){
+									echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';} 
+									?>
 								</select>
 							</div>
 							<div class="mb-3">
@@ -387,7 +392,7 @@
 							</div>
 							<div class="mb-0">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="10" id="task-description" name="task-description"></textarea>
+								<textarea class="form-control" rows="10" id="task-description" name="task-description" required ></textarea>
 							</div>
 						
 					</div>
@@ -425,7 +430,34 @@
 			document.getElementById('task-save-btn').style.display = 'block';
 			document.getElementById('task-delete-btn').style.display = 'none';
 			document.getElementById('task-update-btn').style.display = 'none';
+			document.getElementById('task-title').style = 'none';
+			document.getElementById('task-description').style = 'none';
 		}
+		document.getElementById('task-title').oninvalid = function(){
+			document.getElementById('task-title').style.border = '2px solid red';
+			document.getElementById('task-title').style.boxShadow = '0px 0px 10px red';
+			document.getElementById('task-title').setCustomValidity('Enter Task Title');
+			document.getElementById('task-save-btn').style.display = 'none';
+		};
+		document.getElementById('task-description').oninvalid = function(){
+			document.getElementById('task-description').style.border = '2px solid red';
+			document.getElementById('task-description').style.boxShadow = '0px 0px 10px red';
+			document.getElementById('task-description').setCustomValidity('Enter Task Description');
+			document.getElementById('task-save-btn').style.display = 'none';
+		};
+		document.getElementById('task-description').oninput = function(){
+			document.getElementById('task-description').style = 'none';
+			document.getElementById('task-description').setCustomValidity('');
+			document.getElementById('task-save-btn').style.display = 'block';
+
+		};
+		document.getElementById('task-title').oninput = function(){
+			document.getElementById('task-title').style = 'none';
+			document.getElementById('task-title').setCustomValidity('');
+			document.getElementById('task-save-btn').style.display = 'block';
+		};
+
+
 	</script>
 </body>
 </html>

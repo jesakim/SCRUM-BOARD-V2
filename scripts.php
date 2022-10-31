@@ -69,12 +69,12 @@
     {
         include('database.php');
         //CODE HERE
-        $title = $_POST['task-title'];
+        $title = htmlspecialchars($_POST['task-title']);
         $type = $_POST['task-type'];
         $priority = $_POST['task-priority'];
         $status = $_POST['task-status'];
         $date = $_POST['task-date'];
-        $description = $_POST['task-description'];
+        $description = htmlspecialchars($_POST['task-description']);
         if(empty($date)){
             $date = gmdate("Y-m-d", time());
         }
@@ -98,12 +98,12 @@
         include('database.php');
         //CODE HERE
         $idupdate = $_POST["task-id"]; 
-        $title = $_POST['task-title'];
+        $title = htmlspecialchars($_POST['task-title']);
         $type = $_POST['task-type'];
         $priority = $_POST['task-priority'];
         $status = $_POST['task-status'];
         $date = $_POST['task-date'];
-        $description = $_POST['task-description'];
+        $description = htmlspecialchars($_POST['task-description']);
         //SQL UPDATE
         if(empty($date)){
             $date = gmdate("Y-m-d", time());
