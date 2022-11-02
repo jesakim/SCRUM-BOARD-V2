@@ -1,0 +1,17 @@
+#titleinvalid{
+    display: none;
+}
+#titlevalid{
+    display: none;
+}
+#Descriptioninvalid{
+    display: none;
+}
+#Descriptionvalid{
+    display: none;
+}
+.ticon{
+    top: 28px;
+    right: 15px;
+    display: none;
+}

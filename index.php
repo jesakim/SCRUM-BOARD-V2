@@ -15,6 +15,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 	<link href="assets/css/vendor.min.css" rel="stylesheet" />
 	<link href="assets/css/default/app.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="style.css">
 	<!-- ================== END core-css ================== -->
 </head>
 <body>
@@ -222,7 +223,7 @@
 				
 				<div class="ms-auto">
 				<a href="#modal-task" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill" onclick="addbtn()"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
-				</div>
+			</div>
 			</div>
 			
 			<div class="mb-3 d-md-flex fw-bold">
@@ -241,7 +242,7 @@
 			</div>
 
 			<?php if (isset($_SESSION['message'])): ?>
-				<div class="alert alert-green alert-dismissible fade show">
+				<div class="alert alert-green alert-dismissible fade show" id="alertmsg">
 				<strong>Success!</strong>
 					<?php 
 						echo $_SESSION['message']; 
@@ -250,7 +251,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
 				</div>
 			<?php elseif (isset($_SESSION['message1'])): ?>
-				<div class="alert alert-danger alert-dismissible fade show">
+				<div class="alert alert-danger alert-dismissible fade show" id="alertmsg">
 				<strong>warning!</strong>
 					<?php 
 						echo $_SESSION['message1']; 
@@ -347,9 +348,13 @@
 					<div class="modal-body">
 							<!-- This Input Allows Storing Task Index  -->
 							<input type="hidden"  class="form-control" id="task-id" name="task-id"/>
-							<div class="mb-3">
-								<label class="form-label">Title</label>
-								<input type="text" class="form-control" id="task-title" name="task-title" required/>
+							<div class="mb-3 position-relative">
+								<label class="form-label ">Title</label>
+								<input type="text" class="form-control" id="task-title" name="task-title" required />
+								<span id="ticonv" class="position-absolute ticon"><i class="fa-solid fa-circle-exclamation fs-3 text-red"></i></span>
+								<span id="ticoninv" class="position-absolute ticon"><i class="fa-solid fa-check fs-3 text-green"></i></span>
+								<span id="titlevalid" class="fs-5 text-green">Bon Titre</span>
+								<span id="titleinvalid" class="fs-5 text-red">Entre Un Titre</span>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
@@ -390,74 +395,57 @@
 								<label class="form-label">Date</label>
 								<input type="date" class="form-control" id="task-date" name="task-date"/>
 							</div>
-							<div class="mb-0">
+							<div class="mb-0 position-relative">
 								<label class="form-label">Description</label>
 								<textarea class="form-control" rows="10" id="task-description" name="task-description" required ></textarea>
+								<span id="diconv" class="position-absolute ticon"><i class="fa-solid fa-circle-exclamation fs-3 text-red"></i></span>
+								<span id="diconinv" class="position-absolute ticon"><i class="fa-solid fa-check fs-3 text-green"></i></span>
+								<span id="Descriptionvalid" class="fs-5 text-green">Bonne Description</span>
+								<span id="Descriptioninvalid" class="fs-5 text-red">Entre Une Description</span>
 							</div>
 						
 					</div>
 					<div class="modal-footer">
 						<a href="#" class="btn btn-white" data-bs-dismiss="modal">Cancel</a>
-						<button  type="submit" name="delete" class="btn btn-danger task-action-btn" id="task-delete-btn">Delete</button>
-						<button type="submit" name="update" class="btn btn-warning task-action-btn" id="task-update-btn">Update</button>
+						<a href="#exampleModalCenter" id="task-delete-btn" data-bs-toggle="modal" class="text-decoration-none btn btn-danger" onclick="delvalid()">Delete</a>
+						<button type="submit" name="update" class="btn btn-warning task-action-btn" id="task-update-btn" onclick="valid()">Update</button>
 						<button type="submit" name="save" class="btn btn-primary task-action-btn" id="task-save-btn">Save</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
+	<!-- pop up modal  -->
+	<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="exampleModalLongTitle">Alert</h1>
+      </div>
+      <div class="modal-body">
+        <h3>Do You Really Want To Delete This Task</h3> 
+      </div>
+      <form class="modal-footer" action="scripts.php" method="POST" id="form-task1">
+	  	<input type="hidden"  class="form-control" id="task-id1" name="task-id1"/>
+		<a href="#" class="btn btn-white" data-bs-dismiss="modal">Cancel</a>
+		<button  type="submit" name="delete" class="btn btn-danger task-action-btn" id="task-delete">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>
 	
 	<!-- ================== BEGIN core-js ================== -->
 	<script src="assets/js/vendor.min.js"></script>
 	<script src="assets/js/app.min.js"></script>
+	<script src="scripts.js"></script>
 	<!-- ================== END core-js ================== -->
 
-	<script type="text/javascript">
-		function editdel(id){
-			document.getElementById('task-save-btn').style.display = 'none';
-			document.getElementById('task-id').value = id;
-			document.getElementById('task-delete-btn').style.display = 'block';
-			document.getElementById('task-update-btn').style.display = 'block';
-			document.getElementById('task-title').value = document.getElementById("title"+id).getAttribute('data');
-			document.getElementById('task-date').value = document.getElementById("time"+id).getAttribute('data');
-			document.getElementById('task-description').value = document.getElementById("description"+id).getAttribute('title');
-			document.getElementById('task-status').value = document.getElementById("priority"+id).getAttribute('status');
-			document.getElementById('task-priority').value = document.getElementById("priority"+id).getAttribute('data');
-			if(document.getElementById("type"+id).getAttribute('data')==1){document.getElementById('task-type-feature').checked = true}else{document.getElementById('task-type-bug').checked = true}
-		}
-		function addbtn(){
-			document.getElementById('form-task').reset();
-			document.getElementById('task-save-btn').style.display = 'block';
-			document.getElementById('task-delete-btn').style.display = 'none';
-			document.getElementById('task-update-btn').style.display = 'none';
-			document.getElementById('task-title').style = 'none';
-			document.getElementById('task-description').style = 'none';
-		}
-		document.getElementById('task-title').oninvalid = function(){
-			document.getElementById('task-title').style.border = '2px solid red';
-			document.getElementById('task-title').style.boxShadow = '0px 0px 10px red';
-			document.getElementById('task-title').setCustomValidity('Enter Task Title');
-			document.getElementById('task-save-btn').style.display = 'none';
-		};
-		document.getElementById('task-description').oninvalid = function(){
-			document.getElementById('task-description').style.border = '2px solid red';
-			document.getElementById('task-description').style.boxShadow = '0px 0px 10px red';
-			document.getElementById('task-description').setCustomValidity('Enter Task Description');
-			document.getElementById('task-save-btn').style.display = 'none';
-		};
-		document.getElementById('task-description').oninput = function(){
-			document.getElementById('task-description').style = 'none';
-			document.getElementById('task-description').setCustomValidity('');
-			document.getElementById('task-save-btn').style.display = 'block';
-
-		};
-		document.getElementById('task-title').oninput = function(){
-			document.getElementById('task-title').style = 'none';
-			document.getElementById('task-title').setCustomValidity('');
-			document.getElementById('task-save-btn').style.display = 'block';
-		};
-
-
+	<script >
+		
 	</script>
 </body>
 </html>

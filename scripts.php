@@ -69,12 +69,12 @@
     {
         include('database.php');
         //CODE HERE
-        $title = htmlspecialchars($_POST['task-title']);
+        $title = datacheck($_POST['task-title']);
         $type = $_POST['task-type'];
         $priority = $_POST['task-priority'];
         $status = $_POST['task-status'];
         $date = $_POST['task-date'];
-        $description = htmlspecialchars($_POST['task-description']);
+        $description = datacheck($_POST['task-description']);
         if(empty($date)){
             $date = gmdate("Y-m-d", time());
         }
@@ -98,12 +98,12 @@
         include('database.php');
         //CODE HERE
         $idupdate = $_POST["task-id"]; 
-        $title = htmlspecialchars($_POST['task-title']);
+        $title = datacheck($_POST['task-title']);
         $type = $_POST['task-type'];
         $priority = $_POST['task-priority'];
         $status = $_POST['task-status'];
         $date = $_POST['task-date'];
-        $description = htmlspecialchars($_POST['task-description']);
+        $description = datacheck($_POST['task-description']);
         //SQL UPDATE
         if(empty($date)){
             $date = gmdate("Y-m-d", time());
@@ -125,7 +125,7 @@
     {
         //CODE HERE
         include('database.php');
-        $iddelete = $_POST["task-id"];
+        $iddelete = $_POST["task-id1"];
        
         //SQL DELETE
         $usql = "DELETE FROM  tasks WHERE id=$iddelete";
@@ -136,4 +136,11 @@
          }
 
     }
+    function datacheck($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        $data = ucwords($data);
+        return $data;
+      }
 ?>
