@@ -18,7 +18,7 @@
         include('database.php');
         //CODE HERE
         
-        $sql = "SELECT tasks.id, tasks.title, tasks.task_datetime, tasks.description,status_id,priority_id,type_id,
+        $sql = "SELECT tasks.*,
         types.name as ttype,
         priorities.name as tpriority,
         statuses.name as tstatus 
@@ -51,7 +51,6 @@
                 </div>
             </div>
             </button>';
-            
         }
         }
        
@@ -78,7 +77,7 @@
         if(empty($date)){
             $date = gmdate("Y-m-d", time());
         }
-        if (!empty($title) && !empty($description)) {
+        if (!empty($title) && !empty($description)){
             //SQL INSERT
             $sql = "INSERT INTO `tasks`(`title`, `type_id`, `priority_id`, `status_id`, `task_datetime`, `description`) 
             VALUES ('$title','$type','$priority','$status','$date','$description')";
